@@ -13,12 +13,12 @@ typedef enum {
     LABEL,
     INSTRUCTION,
     DIRECTIVE,
-    OPCODE,
     DEST_OPERAND,
     SRC_OPERAND,
 }node_type;
 
 typedef enum{
+    BAD_DIR = -1,
     DATA,
     STRUCT,
     STRING,
@@ -64,7 +64,7 @@ DT(string_node){
 };
 
 DT(operand_node){
-    unsigned int operand_type;
+    unsigned int m_operand_type;
     union {
         unsigned int op_value;
         char label[MAX_SIZE];
@@ -73,12 +73,12 @@ DT(operand_node){
 
 DT(inst_node){
     unsigned int m_opcode;
-    operand_node first_op;
-    operand_node second_op;
+    operand_node m_first_op;
+    operand_node m_second_op;
 };
 
 DT(dir_node){
-    node_type dir_type;
+    dir_type m_dir_type;
     union {
         ent_node        u_ent;
         ext_node        u_ext;
@@ -122,7 +122,7 @@ static err_t build_dir_node(dir_type a_type, st_node a_root, parser a_parser);
  * @param a_token
  * @return
  */
-static node_type get_dir_type(char *a_token);
+static dir_type get_dir_type(char *a_token);
 /**
  *
  * @param a_parser
@@ -198,10 +198,20 @@ static err_t build_directive_st(parser a_parser, st_node a_root){
 }
 
 static err_t build_instruct_st(parser a_parser, st_node a_root){
-
 }
 
-static node_type get_dir_type(char *a_token){
+static dir_type get_dir_type(char *a_token){
+    if(strcmp(a_token,".data") == 0)
+        return DATA;
+    if(strcmp(a_token,".string") == 0)
+        return STRING;
+    if(strcmp(a_token,".struct") == 0)
+        return STRUCT;
+    if(strcmp(a_token,".extern") == 0)
+        return EXTERN;
+    if(strcmp(a_token,".entry") == 0)
+        return ENTRY;
+    return BAD_DIR;
 }
 
 static err_t build_dir_node(dir_type a_type, st_node a_root, parser a_parser){
@@ -214,38 +224,61 @@ static void st_insert_data(st_node a_root, long int a_data){
 }
 
 
-static bool_t extract_data(parser a_parser, st_node node){
+static bool_t extract_data(parser a_parser, long int *pout){
     char *ptr = NULL;
     long int val = 0;
 
     val = strtol(parser_peak(a_parser),&ptr,10);
     if(*ptr != 0)
         return False;
-    st_insert_data(node,val);
+    *pout = val;
     return True;
 }
 
 
 static err_t get_data(st_node a_root, parser a_parser){
     bool_t args_flag = False;
+    long int val = 0;
 
     while(parser_has_next(a_parser)){
         if(args_flag && is_coma(parser_pop(a_parser)) == False)
             return MISSING_COMMA_ERR;
-        if(extract_data(a_parser,a_root) == False){
+        if(extract_data(a_parser,&val) == False){
             if(is_coma(parser_peak(a_parser)))
                 return args_flag?MULT_COMMAS_ERR:ILLEGAL_COMMA_ERR;
             return BAD_INT_ERR;
         }
         else if(!args_flag)
             args_flag = True;
+        else
+            st_insert_data(a_root,val);
         parser_pop(a_parser);
     }
     return (args_flag == True)? NO_ERR:MISSING_ARGS_ERR;
 }
+static void st_insert_struct(st_node a_root, char *a_str, long int a_val){
+
+}
+
 
 static err_t get_struct(st_node a_root, parser a_parser){
+    long int val;
+    char str[81] = {0};
+    err_t result = NO_ERR;
 
+    if(extract_data(a_parser,&val)== False)
+        return (is_coma(parser_pop(a_parser)))?ILLEGAL_COMMA_ERR:BAD_INT_ERR;
+    if(parser_has_next(a_parser) == False)
+        return MISSING_ARGS_ERR;
+    if(is_coma(parser_pop(a_parser)) == False)
+        return MISSING_STRING_ERR;
+    result = extract_string(a_parser,str);
+    if(result != NO_ERR && parser_has_next(a_parser))
+        return EXTRANEOUS_TEXT_ERR;
+    if(result == NO_ERR){
+        st_insert_struct(a_root,str,val);
+    }
+    return result;
 }
 
 static void st_insert_string(st_node a_root, char *string){
