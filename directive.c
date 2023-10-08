@@ -1,4 +1,4 @@
-#include "directory.h"
+#include "directive.h"
 
 typedef enum{
     DATA,
@@ -7,6 +7,7 @@ typedef enum{
     EXTERN,
     ENTRY
 }DIR_TYPE;
+
 
 DEFINE_DT(data_node);
 DEFINE_DT(struct_node);
@@ -25,7 +26,6 @@ DT(struct_node){
     long int m_value;
     char m_string[81];
 };
-
 
 
 DT(dir_t){
