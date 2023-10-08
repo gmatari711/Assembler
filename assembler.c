@@ -1,7 +1,8 @@
 #include "assembler.h"
 #include "stdio.h"
-#include "error_type.h"
 #include "queue.h"
+#include "assembly_unit.h"
+
 
 ADT(assembler){
     FILE *m_source_file;
