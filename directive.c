@@ -1,5 +1,4 @@
 #include "directive.h"
-
 typedef enum{
     DATA,
     STRING,

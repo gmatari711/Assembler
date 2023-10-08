@@ -3,6 +3,7 @@
 
 #include "adt_auxiliary.h"
 
+
 DEFINE_ADT(assembler);
 
 

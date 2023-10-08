@@ -1,6 +1,5 @@
 #include "assembly_unit.h"
-
-#include "directory.h"
+#include "directive.h"
 #include "instruction.h"
 
 typedef enum{

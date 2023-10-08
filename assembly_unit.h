@@ -14,7 +14,5 @@ DEFINE_ADT(assembly_unit);
 err_t assembly_unit_process_line(assembly_unit a_asu, char *line);
 
 
-err_t assembly_unit_process_line(assembly_unit a_asu, char *line);
-
 
 #endif
