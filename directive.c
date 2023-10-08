@@ -1,12 +1,4 @@
 #include "directive.h"
-typedef enum{
-    DATA,
-    STRING,
-    STRUCT,
-    EXTERN,
-    ENTRY
-}DIR_TYPE;
-
 
 DEFINE_DT(data_node);
 DEFINE_DT(struct_node);
