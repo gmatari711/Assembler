@@ -19,7 +19,7 @@ DT(struct_node){
 };
 
 
-DT(dir_t){
+DT(Directive){
     int m_data_type;
     union{
         data_node   u_data;

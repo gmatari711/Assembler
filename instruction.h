@@ -9,12 +9,12 @@ typedef enum{
     REGISTER
 }operand_type;
 
-DEFINE_ADT(inst_t);
+DEFINE_ADT(Isntruction);
 
-inst_t inst_t_create();
+Isntruction inst_t_create();
 
-void inst_t_destroy(inst_t *p_inst);
+void inst_t_destroy(Isntruction *p_inst);
 
-int inst_t_get_opcode(inst_t a_inst);
+int inst_t_get_opcode(Isntruction a_inst);
 
 #endif

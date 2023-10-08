@@ -3,7 +3,7 @@
 #include "adt_auxiliary.h"
 #include "error_type.h"
 
-DEFINE_ADT(dir_t);
+DEFINE_ADT(Directive);
 
 typedef enum{
     DATA,
@@ -11,10 +11,13 @@ typedef enum{
     STRUCT,
     EXTERN,
     ENTRY
-}dir_type;
+}DirectiveType;
 
-err_t dir_get_directive(dir_t a_dir, char *string);
+err_t dir_get_directive(Directive a_dir, char *string);
 
+Directive dir_create();
+
+void dir_destroy(Directive *p_dir);
 
 
 #endif

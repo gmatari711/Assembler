@@ -9,19 +9,19 @@ DT(operand_t){
     } value;
 };
 
-ADT(inst_t){
+ADT(Isntruction){
   int m_opcode;
   operand_t m_op1;
   operand_t m_op2;
 };
 
-inst_t inst_t_create(){
-    inst_t result = NULL;
-    ALLOCATE(result,inst_t);
+Isntruction inst_t_create(){
+    Isntruction result = NULL;
+    ALLOCATE(result,Isntruction);
     return result;
 }
 
-void inst_t_destroy(inst_t *p_inst){
+void inst_t_destroy(Isntruction *p_inst){
     assert(NULL != p_inst && NULL != *p_inst);
     free(*p_inst);
     *p_inst = NULL;

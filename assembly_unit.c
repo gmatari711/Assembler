@@ -11,6 +11,6 @@ ADT(assembly_unit){
     unit_t m_unit;
     union{
         inst_t  u_inst;
-        dir_t   u_dir;
+        Directive   u_dir;
     };
 };
